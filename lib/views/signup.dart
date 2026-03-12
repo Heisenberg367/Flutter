@@ -18,7 +18,7 @@ class _SignupscreenState extends State<Signupscreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset('assets/Pasted image.png'),
+              Image.asset('assets/kili.png'),
               const SizedBox(height: 30),
               const TextField(
                 decoration: InputDecoration(
@@ -65,14 +65,14 @@ class _SignupscreenState extends State<Signupscreen> {
                 height: 50,
                 alignment: Alignment.center,
                 decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 3, 79, 140),
+                  color:  Color.fromARGB(255, 0, 102, 204),
                 ),
                 child: const Text(
                   "Sign Up",
                   style: TextStyle(
-                    color: Color.fromARGB(255, 234, 19, 19),
-                    fontWeight: FontWeight.w900,
-                    fontSize: 25,
+                      color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                     fontSize: 18,
                   ),
                 ),
               ),
