@@ -12,27 +12,36 @@ class _SignupscreenState extends State<Signupscreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
         child: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset('assets/kili.png'),
+              Image.asset('assets/kili.png', height: 120),
               const SizedBox(height: 30),
-              const TextField(
+              TextField(
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.person),
                   hintText: "Enter username",
-                  prefixIcon: Icon(Icons.person),
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
               ),
               const SizedBox(height: 10),
-              const TextField(
+              TextField(
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.email),
                   hintText: "Enter email",
-                  prefixIcon: Icon(Icons.email),
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
               ),
               const SizedBox(height: 10),
@@ -45,34 +54,53 @@ class _SignupscreenState extends State<Signupscreen> {
                   ),
                 ],
               ),
-              const TextField(
+              TextField(
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.lock),
                   hintText: "Enter password",
-                  prefixIcon: Icon(Icons.lock),
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
               ),
               const SizedBox(height: 10),
-              const TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: "Confirm password",
-                  prefixIcon: Icon(Icons.lock_outline),
-                ),
+            TextField(
+              obscureText: true,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.lock_outline),
+               hintText: "Confirm password",
+                filled: true,
+               fillColor: Colors.grey[100],
+               border: OutlineInputBorder(
+               borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
               ),
+           ),
+          ),
               const SizedBox(height: 30),
               Container(
                 height: 50,
                 alignment: Alignment.center,
-                decoration: const BoxDecoration(
-                  color:  Color.fromARGB(255, 0, 102, 204),
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 0, 102, 204),
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 5,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
                 ),
                 child: const Text(
                   "Sign Up",
                   style: TextStyle(
-                      color: Colors.white,
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
-                     fontSize: 18,
+                    fontSize: 18,
                   ),
                 ),
               ),

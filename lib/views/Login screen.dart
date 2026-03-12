@@ -14,19 +14,23 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
         child: SingleChildScrollView(
           child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Image.asset('assets/kili.png'),
+                Image.asset('assets/kili.png', height: 120),
                 const SizedBox(height: 30),
-                const TextField(
+                TextField(
                     decoration: InputDecoration(
-                        border: OutlineInputBorder(),
+                        prefixIcon: const Icon(Icons.person),
                         hintText: "Enter username",
-                        prefixIcon: Icon(Icons.person))),
+                        filled: true,
+                        fillColor: Colors.grey[100],
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                        ))),
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -35,25 +39,42 @@ class _LoginScreenState extends State<LoginScreen> {
                             fontSize: 16, fontWeight: FontWeight.w700)),
                   ],
                 ),
-                const TextField(
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: "Enter password",
-                        prefixIcon: Icon(Icons.lock))),
+                TextField(
+                obscureText: true, // hides the password
+               decoration: InputDecoration(
+                prefixIcon: Icon(Icons.lock),
+                hintText: "Enter password",
+                filled: true,
+                 fillColor: Colors.grey[100],
+                border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+      ),
+    ),
+  ),
                 const SizedBox(height: 30),
                 Container(
                   height: 50,
                   alignment: Alignment.center,
-                  decoration: const BoxDecoration(
-                      color: Color.fromARGB(255, 0, 102, 204),),
+                  decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 0, 102, 204),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 5,
+                          offset: Offset(0, 3),
+                        ),
+                      ]),
                   child: const Text("Login",
                       style: TextStyle(
-                      color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                     fontSize: 18,
-                    )),
-                    ),
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      )),
+                ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text("Don't have an account?"),
                     const SizedBox(width: 5),
