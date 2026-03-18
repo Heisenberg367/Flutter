@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/get_navigation.dart';
+import 'package:flutter_application_b/controllers/Login%20controller.dart';
+import 'package:flutter_application_b/views/homescreen.dart';
+import 'package:get/get.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -10,6 +11,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  Logincontoller loginController = Get.put(Logincontoller());
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Image.asset('assets/kili.png', height: 120),
                 const SizedBox(height: 30),
                 TextField(
+                  controller: usernameController,
                     decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.person),
                         hintText: "Enter username",
@@ -40,20 +46,33 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
                 TextField(
-                obscureText: true, // hides the password
-               decoration: InputDecoration(
-                prefixIcon: Icon(Icons.lock),
-                hintText: "Enter password",
-                filled: true,
-                 fillColor: Colors.grey[100],
-                border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
-      ),
-    ),
-  ),
+                  controller: passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    prefixIcon: GestureDetector(
+                      onTap: () {},
+                      child: const Icon(Icons.lock),
+                    ),
+                    hintText: "Enter password",
+                    filled: true,
+                    fillColor: Colors.grey[100],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 30),
-                Container(
+                GestureDetector(
+  onTap: () {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const Homescreen(),
+      ),
+    );
+  },
+  child:Container(
                   height: 50,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
@@ -73,6 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         fontSize: 18,
                       )),
                 ),
+                ),  // <-- closing GestureDetector
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -82,7 +102,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: const Text("Sign up",
                           style: TextStyle(color: Colors.blue)),
                       onTap: () {
-                        Get.toNamed("/signup");
+                        bool success = loginController.Login(
+                          usernameController.text,
+                          passwordController.text,
+                        );
+                        if (success) {
+                          Get.toNamed("/signup");
+                        } else {
+                          Get.snackbar("Login Failed", "Please check your credentials");
+                        }
                       },
                     ),
                     const Spacer(),
