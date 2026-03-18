@@ -31,13 +31,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 16),
             // Name
             const Text(
-              "John Doe",
+              "Fidel Munyendo",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             // Email
             const Text(
-              "johndoe@example.com",
+              "fidelmunyendo@example.com",
               style: TextStyle(fontSize: 16, color: Colors.black54),
             ),
             const SizedBox(height: 20),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'cart.dart';
-
+import 'profile.dart'; // 👈 add this import (adjust filename if different)
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -185,6 +185,18 @@ class _HomescreenState extends State<Homescreen> {
           setState(() {
             _currentIndex = index;
           });
+          // 👇 navigation added here only
+          if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CartScreen()),
+            );
+          } else if (index == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
+            );
+          }
         },
       ),
     );

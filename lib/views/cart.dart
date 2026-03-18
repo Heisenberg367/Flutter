@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-
+import 'package:flutter_application_b/views/Checkoutscreen.dart';
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
 
@@ -27,9 +27,9 @@ class _CartScreenState extends State<CartScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Column(
                 children: [
-                  cartItem("Phone", "2", 250),
-                  cartItem("LED Light", "1", 50),
-                  cartItem("Cable", "3", 15),
+                  cartItem("Phone", "2", 250.00),
+                  cartItem("LED Light", "1", 50.00),
+                  cartItem("Cable", "3", 15.00),
                 ],
               ),
             ),
@@ -40,7 +40,10 @@ class _CartScreenState extends State<CartScreen> {
                 backgroundColor: Color.fromARGB(251, 10, 213, 207),
                 padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
               ),
-              onPressed: () {},
+              onPressed: () {Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => const CheckoutScreen()),
+  );},
               child: const Text("Proceed to Checkout", style: TextStyle(fontSize: 16)),
             ),
           ],
