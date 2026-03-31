@@ -28,15 +28,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 30),
                 TextField(
                   controller: usernameController,
-                    decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.person),
-                        hintText: "Enter username",
-                        filled: true,
-                        fillColor: Colors.grey[100],
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide.none,
-                        ))),
+                  decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.person),
+                      hintText: "Enter email",
+                      filled: true,
+                      fillColor: Colors.grey[100],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ))),
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -63,55 +63,48 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 30),
+
+                
                 GestureDetector(
-  onTap: () {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const Homescreen(),
-      ),
-    );
-  },
-  child:Container(
-                  height: 50,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 0, 102, 204),
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 5,
-                          offset: Offset(0, 3),
-                        ),
-                      ]),
-                  child: const Text("Login",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      )),
+                  onTap: () {
+                    loginController.Login(
+                   usernameController.text.trim(),
+                  passwordController.text.trim(),
+                    );
+                  },
+                  child: Container(
+                    height: 50,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 0, 102, 204),
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 5,
+                            offset: Offset(0, 3),
+                          ),
+                        ]),
+                    child: const Text("Login",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        )),
+                  ),
                 ),
-                ),  // <-- closing GestureDetector
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text("Don't have an account?"),
                     const SizedBox(width: 5),
                     GestureDetector(
+                      onTap: () {
+                        Get.toNamed("/signup");
+                      },
                       child: const Text("Sign up",
                           style: TextStyle(color: Colors.blue)),
-                      onTap: () {
-                        bool success = loginController.Login(
-                          usernameController.text,
-                          passwordController.text,
-                        );
-                        if (success) {
-                          Get.toNamed("/signup");
-                        } else {
-                          Get.snackbar("Login Failed", "Please check your credentials");
-                        }
-                      },
                     ),
                     const Spacer(),
                     const Text("Forgot password?"),

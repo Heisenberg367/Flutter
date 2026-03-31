@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Signupscreen extends StatefulWidget {
   const Signupscreen({super.key});
@@ -8,6 +10,110 @@ class Signupscreen extends StatefulWidget {
 }
 
 class _SignupscreenState extends State<Signupscreen> {
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+
+  bool isLoading = false;
+
+  bool isValidEmail(String email) {
+    return RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
+  }
+
+  Future<void> registerUser() async {
+    String username = usernameController.text.trim();
+    String email = emailController.text.trim();
+    String phone = phoneController.text.trim();
+    String password = passwordController.text;
+    String confirmPassword = confirmPasswordController.text;
+
+    // Validations
+    if (username.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Username cannot be empty")),
+      );
+      return;
+    }
+
+    if (email.isEmpty || !isValidEmail(email)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Enter a valid email address")),
+      );
+      return;
+    }
+
+    if (phone.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Phone number cannot be empty")),
+      );
+      return;
+    }
+
+    if (password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Password cannot be empty")),
+      );
+      return;
+    }
+
+    if (password.length < 9) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Password must be at least 9 characters")),
+      );
+      return;
+    }
+
+    if (confirmPassword.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please confirm your password")),
+      );
+      return;
+    }
+
+    if (password != confirmPassword) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Passwords do not match")),
+      );
+      return;
+    }
+
+    setState(() => isLoading = true);
+
+    try {
+      var response = await http.post(
+        Uri.parse("http://10.0.2.2/oldtraffold/register.php"),
+        body: {
+          "username": username,
+          "full_name": username,
+          "email": email,
+          "phone": phone,
+          "password": password,
+        },
+      );
+
+      var data = jsonDecode(response.body);
+
+      if (data['success'] == 1) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Registration successful!")),
+        );
+        Navigator.pop(context);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(data['error'] ?? "Registration failed")),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: $e")),
+      );
+    }
+
+    setState(() => isLoading = false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,6 +126,7 @@ class _SignupscreenState extends State<Signupscreen> {
               Image.asset('assets/kili.png', height: 120),
               const SizedBox(height: 30),
               TextField(
+                controller: usernameController,
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.person),
                   hintText: "Enter username",
@@ -33,9 +140,25 @@ class _SignupscreenState extends State<Signupscreen> {
               ),
               const SizedBox(height: 10),
               TextField(
+                controller: emailController,
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.email),
                   hintText: "Enter email",
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: phoneController,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.phone),
+                  hintText: "Enter phone",
                   filled: true,
                   fillColor: Colors.grey[100],
                   border: OutlineInputBorder(
@@ -55,6 +178,8 @@ class _SignupscreenState extends State<Signupscreen> {
                 ],
               ),
               TextField(
+                controller: passwordController,
+                obscureText: true,
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.lock),
                   hintText: "Enter password",
@@ -67,41 +192,47 @@ class _SignupscreenState extends State<Signupscreen> {
                 ),
               ),
               const SizedBox(height: 10),
-            TextField(
-              obscureText: true,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.lock_outline),
-               hintText: "Confirm password",
-                filled: true,
-               fillColor: Colors.grey[100],
-               border: OutlineInputBorder(
-               borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
-              ),
-           ),
-          ),
-              const SizedBox(height: 30),
-              Container(
-                height: 50,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 0, 102, 204),
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 5,
-                      offset: Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: const Text(
-                  "Sign Up",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
+              TextField(
+                controller: confirmPasswordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.lock_outline),
+                  hintText: "Confirm password",
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
                   ),
+                ),
+              ),
+              const SizedBox(height: 30),
+              GestureDetector(
+                onTap: isLoading ? null : registerUser,
+                child: Container(
+                  height: 50,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 0, 102, 204),
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 5,
+                        offset: Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: isLoading
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : const Text(
+                          "Sign Up",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
                 ),
               ),
               const SizedBox(height: 10),
