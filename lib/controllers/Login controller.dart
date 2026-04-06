@@ -19,7 +19,7 @@ class Logincontoller extends GetxController {
 
     try {
       var response = await http.post(
-        Uri.parse("http://192.168.88.18/oldtraffold/login.php"), 
+        Uri.parse(("http://192.168.0.108/oldtraffold/login.php"),), 
         body: {
           "email": username,    
           "password": password,

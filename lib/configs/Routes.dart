@@ -7,6 +7,7 @@ var routes = [
   GetPage(name: "/", page: () => const LoginScreen()),
   GetPage(name: "/signup", page: () => const Signupscreen()),
   GetPage(name: "/homescreen", page: () => const Homescreen()),
+  
 ];
 
 
