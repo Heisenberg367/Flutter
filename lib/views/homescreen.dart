@@ -18,6 +18,8 @@ class _HomescreenState extends State<Homescreen> {
   int _currentIndex = 0;
   List products = [];
   bool isLoading = true;
+  String _selectedCategory = "All";
+
 
   
   static const String _baseUrl = "http://localhost/oldtraffold/get_products.php";
@@ -48,12 +50,12 @@ class _HomescreenState extends State<Homescreen> {
       }
     } catch (e) {
       setState(() => isLoading = false);
-      debugPrint("Error fetching products: $e"); // ✅ FIX 3: Use debugPrint, not print
+      debugPrint("Error fetching products: $e"); 
     }
   }
 
   void _onBottomNavTap(int index) {
-    if (index == _currentIndex) return; // ✅ FIX 4: Avoid redundant navigation
+    if (index == _currentIndex) return; 
 
     setState(() => _currentIndex = index);
 
@@ -145,45 +147,57 @@ class _HomescreenState extends State<Homescreen> {
               ),
 
               // Categories
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12),
-                child: Text("Categories",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87)),
+              Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 12),
+  child: const Text("Categories",
+      style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: Colors.black87)),
+),
+const SizedBox(height: 8),
+SingleChildScrollView(
+  scrollDirection: Axis.horizontal,
+  padding: const EdgeInsets.symmetric(horizontal: 12),
+  child: Row(
+    children: ["All", "Lighting", "Phones", "Electronics Accessories", "Cables"]
+        .map(
+          (category) => GestureDetector(
+            onTap: () {
+              setState(() {
+                _selectedCategory = category;
+              });
+              // Add your filter logic here
+            },
+            child: Container(
+              margin: const EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: _selectedCategory == category
+                    ? const Color.fromARGB(251, 10, 213, 207)
+                    : Colors.grey.shade200,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: const [
+                  BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 4,
+                      offset: Offset(0, 2))
+                ],
               ),
-              const SizedBox(height: 8),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Row(
-                  children: ["All", "Lighting", "Phones", "Electronics Accessories", "Cables"]
-                      .map(
-                        (category) => Container(
-                          margin: const EdgeInsets.only(right: 8),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: const Color.fromARGB(251, 10, 213, 207),
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: const [
-                              BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 4,
-                                  offset: Offset(0, 2))
-                            ],
-                          ),
-                          child: Text(category,
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600)),
-                        ),
-                      )
-                      .toList(),
-                ),
-              ),
-              const SizedBox(height: 16),
+              child: Text(category,
+                  style: TextStyle(
+                      color: _selectedCategory == category
+                          ? Colors.white
+                          : Colors.black54,
+                      fontWeight: FontWeight.w600)),
+            ),
+          ),
+        )
+        .toList(),
+  ),
+),
+const SizedBox(height: 16),
 
               // Products
               const Padding(
