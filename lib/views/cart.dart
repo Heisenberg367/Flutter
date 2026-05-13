@@ -21,7 +21,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     super.initState();
-    // ✅ Safe initialization — never call Get.find in field declarations
+    // Safe initialization
     cartController = Get.find<CartController>();
   }
 
@@ -36,7 +36,7 @@ class _CartScreenState extends State<CartScreen> {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         iconTheme: const IconThemeData(color: Colors.white),
-        automaticallyImplyLeading: false, // Remove default back button
+        automaticallyImplyLeading: false, 
       ),
       body: Obx(() {
         if (cartController.cartItems.isEmpty) {
@@ -85,7 +85,7 @@ class _CartScreenState extends State<CartScreen> {
               ),
             ),
 
-            // Order summary footer
+            // Order summary 
             Obx(() => Container(
                   padding: const EdgeInsets.all(16),
                   decoration: const BoxDecoration(

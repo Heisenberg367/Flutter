@@ -83,7 +83,7 @@ class _SignupscreenState extends State<Signupscreen> {
 
     try {
       var response = await http.post(
-        Uri.parse("http://10.0.2.2/oldtraffold/register.php"),
+        Uri.parse("http://localhost/oldtraffold/register.php"),
         body: {
           "username": username,
           "full_name": username,

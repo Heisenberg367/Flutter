@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'cart.dart';
 import 'profile.dart';
 import 'orders.dart';
-import 'product_details.dart'; 
+import 'product_details.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -16,13 +16,12 @@ class Homescreen extends StatefulWidget {
 
 class _HomescreenState extends State<Homescreen> {
   int _currentIndex = 0;
-  List products = [];
+  List<Map<String, dynamic>> products = [];
   bool isLoading = true;
   String _selectedCategory = "All";
 
-
-  
-  static const String _baseUrl = "http://localhost/oldtraffold/get_products.php";
+  static const String _baseUrl =
+      "http://localhost/oldtraffold/get_products.php";
 
   @override
   void initState() {
@@ -33,30 +32,31 @@ class _HomescreenState extends State<Homescreen> {
   Future<void> fetchProducts() async {
     try {
       var response = await http.get(Uri.parse(_baseUrl));
-
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
-
-        if (data["code"] == 1 && data["products"] != null) {
-          setState(() {
-            products = data["products"];
-            isLoading = false;
-          });
-        } else {
-          setState(() => isLoading = false);
-        }
+        setState(() {
+          products = List<Map<String, dynamic>>.from(data);
+          isLoading = false;
+        });
       } else {
         setState(() => isLoading = false);
       }
     } catch (e) {
       setState(() => isLoading = false);
-      debugPrint("Error fetching products: $e"); 
+      debugPrint("Error fetching products: $e");
     }
   }
 
-  void _onBottomNavTap(int index) {
-    if (index == _currentIndex) return; 
+  // Category filter getter
+  List<Map<String, dynamic>> get filteredProducts {
+    if (_selectedCategory == "All") return products;
+    return products
+        .where((p) => p["category"] == _selectedCategory)
+        .toList();
+  }
 
+  void _onBottomNavTap(int index) {
+    if (index == _currentIndex) return;
     setState(() => _currentIndex = index);
 
     if (index == 1) {
@@ -147,57 +147,62 @@ class _HomescreenState extends State<Homescreen> {
               ),
 
               // Categories
-              Padding(
-  padding: const EdgeInsets.symmetric(horizontal: 12),
-  child: const Text("Categories",
-      style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: Colors.black87)),
-),
-const SizedBox(height: 8),
-SingleChildScrollView(
-  scrollDirection: Axis.horizontal,
-  padding: const EdgeInsets.symmetric(horizontal: 12),
-  child: Row(
-    children: ["All", "Lighting", "Phones", "Electronics Accessories", "Cables"]
-        .map(
-          (category) => GestureDetector(
-            onTap: () {
-              setState(() {
-                _selectedCategory = category;
-              });
-              // Add your filter logic here
-            },
-            child: Container(
-              margin: const EdgeInsets.only(right: 8),
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: _selectedCategory == category
-                    ? const Color.fromARGB(251, 10, 213, 207)
-                    : Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: const [
-                  BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 4,
-                      offset: Offset(0, 2))
-                ],
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                child: Text("Categories",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87)),
               ),
-              child: Text(category,
-                  style: TextStyle(
-                      color: _selectedCategory == category
-                          ? Colors.white
-                          : Colors.black54,
-                      fontWeight: FontWeight.w600)),
-            ),
-          ),
-        )
-        .toList(),
-  ),
-),
-const SizedBox(height: 16),
+              const SizedBox(height: 8),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Row(
+                  children: [
+                    "All",
+                    "Lighting",
+                    "Phones",
+                    "Electronics Accessories",
+                    "Cables"
+                  ]
+                      .map(
+                        (category) => GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _selectedCategory = category;
+                            });
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(right: 8),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: _selectedCategory == category
+                                  ? const Color.fromARGB(251, 10, 213, 207)
+                                  : Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: const [
+                                BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 4,
+                                    offset: Offset(0, 2))
+                              ],
+                            ),
+                            child: Text(category,
+                                style: TextStyle(
+                                    color: _selectedCategory == category
+                                        ? Colors.white
+                                        : Colors.black54,
+                                    fontWeight: FontWeight.w600)),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+              const SizedBox(height: 16),
 
               // Products
               const Padding(
@@ -218,7 +223,7 @@ const SizedBox(height: 16),
                             color: Color.fromARGB(251, 10, 213, 207)),
                       ),
                     )
-                  : products.isEmpty //  Handle empty product list
+                  : filteredProducts.isEmpty
                       ? const Center(
                           child: Padding(
                             padding: EdgeInsets.all(40),
@@ -229,16 +234,15 @@ const SizedBox(height: 16),
                           ),
                         )
                       : Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 12),
                           child: Wrap(
                             spacing: 12,
                             runSpacing: 12,
-                            children: products
+                            children: filteredProducts
                                 .map(
-                                  (product) => ProductDetails( // ✅  Use PascalCase widget name
-                                    product: product is Map<String, dynamic>
-                                        ? product
-                                        : <String, dynamic>{},
+                                  (product) => ProductDetails(
+                                    product: product,
                                   ),
                                 )
                                 .toList(),

@@ -9,7 +9,7 @@ class ProductDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ✅ Get the shared CartController instance
+    // Get the shared CartController 
     final CartController cartController = Get.find<CartController>();
 
     double cardWidth = (MediaQuery.of(context).size.width - 36) / 2;
@@ -85,18 +85,18 @@ class ProductDetails extends StatelessWidget {
               ),
             ),
 
-            // ✅ Add to Cart button — now fully wired
+            //  Add to Cart button 
             Padding(
               padding: const EdgeInsets.all(8),
               child: Obx(() {
-                // ✅ Check if item is already in cart
+                // Check if item is already in cart
                 bool inCart = cartController.cartItems
                     .any((item) => item["id"] == product["id"]?.toString());
 
                 return GestureDetector(
                   onTap: () {
                     if (inCart) {
-                      // ✅ Go directly to cart if already added
+                      //  Go directly to cart if already added
                       Get.snackbar(
                         "Already in Cart",
                         "${product["name"]} is already in your cart",
@@ -106,7 +106,7 @@ class ProductDetails extends StatelessWidget {
                         duration: const Duration(seconds: 2),
                       );
                     } else {
-                      // ✅ Add to cart
+                      //  Add to cart
                       cartController.addToCart({
                         "id": product["id"]?.toString() ?? "",
                         "name": product["name"] ?? "",
@@ -120,7 +120,7 @@ class ProductDetails extends StatelessWidget {
                     alignment: Alignment.center,
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     decoration: BoxDecoration(
-                      // ✅ Button changes colour when item is in cart
+                      //  Button changes colour when item is in cart
                       color: inCart
                           ? Colors.green
                           : const Color.fromARGB(251, 10, 213, 207),

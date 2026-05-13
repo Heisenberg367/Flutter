@@ -83,7 +83,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               ),
               const SizedBox(height: 10),
 
-              // Real cart items
+              // Cart items
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Column(
@@ -133,7 +133,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
               const SizedBox(height: 12),
 
-              // Real Total
+              // Total
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Container(
@@ -169,30 +169,42 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
               const SizedBox(height: 30),
 
-              // Pay Now Button
-              Center(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(251, 10, 213, 207),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 50, vertical: 15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+              // Pay with M-Pesa Button
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF00A651),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                    ),
+                    onPressed: () {
+                      Get.toNamed('/mpesa-checkout', arguments: {
+                        'amount': total.toInt(),
+                        'orderId':
+                            'ORD-${DateTime.now().millisecondsSinceEpoch}',
+                      });
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.lock_rounded, size: 18),
+                        SizedBox(width: 8),
+                        Text(
+                          'Pay with M-Pesa',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => OrderConfirmationScreen(
-                          items: items.toList(),
-                          total: total,
-                        ),
-                      ),
-                    );
-                  },
-                  child: const Text("Pay Now",
-                      style: TextStyle(fontSize: 16, color: Colors.white)),
                 ),
               ),
 
@@ -291,7 +303,8 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 12),
               child: Text("Order Details",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  style:
+                      TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             ),
             const SizedBox(height: 8),
             Padding(
@@ -328,7 +341,8 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                         const SizedBox(width: 8),
                         Text("KSh ${itemTotal.toStringAsFixed(2)}",
                             style: const TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold)),
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold)),
                       ],
                     ),
                   );
@@ -369,16 +383,19 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 12),
               child: Text("Delivery Info",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  style:
+                      TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             ),
             const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Column(
                 children: [
-                  _deliveryRow(Icons.local_shipping, "Estimated Delivery: 2-3 days"),
+                  _deliveryRow(
+                      Icons.local_shipping, "Estimated Delivery: 2-3 days"),
                   const SizedBox(height: 10),
-                  _deliveryRow(Icons.location_on, "Delivery Address: Nairobi, Kenya"),
+                  _deliveryRow(
+                      Icons.location_on, "Delivery Address: Nairobi, Kenya"),
                   const SizedBox(height: 10),
                   _deliveryRow(Icons.payment, "Payment: M-Pesa"),
                 ],
